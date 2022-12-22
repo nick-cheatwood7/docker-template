@@ -3,6 +3,9 @@ import reactLogo from "./assets/react.svg";
 import "./App.css";
 import { useEffect } from "react";
 
+const __prod__ = process.env.NODE_ENV === "production";
+const BASE_URL = __prod__ ? "/api" : "http://localhost:4000/api";
+
 function App() {
     const [count, setCount] = useState(0);
     const [users, setUsers] = useState([]);
@@ -12,7 +15,7 @@ function App() {
     }, []);
 
     async function getUsers() {
-        const res = await fetch("http://localhost:4000/");
+        const res = await fetch(`${BASE_URL}/people`);
         const data = await res.json();
         setUsers(data);
     }

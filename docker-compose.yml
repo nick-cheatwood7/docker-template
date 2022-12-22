@@ -1,34 +1,38 @@
 version: "3.8"
+
 services:
     node-app:
-        container_name: api_container
+        container_name: node-app
         restart: unless-stopped
+        env_file:
+            - ./api/.env
         environment:
             - NODE_ENV=production
             - PORT=4000
         build:
             context: ./api
             dockerfile: Dockerfile
-        # ports:
-        #     - 4000:4000
         volumes:
             - ./api:/app
             - /app/node_modules
+        networks:
+            - backend
+
     react-app:
         build: ./web
-        container_name: web_container
-        # ports:
-        #     - "5173:5173"
-        stdin_open: true
-        tty: true
+        container_name: react-app
         volumes:
             - ./web:/app
             - /app/node_modules
+        networks:
+            - frontend
+            - backend
         depends_on:
             - node-app
+
     caddy:
         image: caddy/caddy:2.2.1-alpine
-        container_name: caddy_container
+        container_name: caddy-service
         restart: unless-stopped
         ports:
             - 443:443
@@ -36,9 +40,21 @@ services:
         volumes:
             - $PWD/Caddyfile:/etc/caddy/Caddyfile
             - $PWD/site:/services
+            - $PWD/web/dist:/var/www/html
             - caddy_data:/data
             - caddy_config:/config
+        networks:
+            - frontend
+            - backend
+        depends_on:
+            - node-app
+            - react-app
+
 volumes:
     caddy_data:
         # external: true
     caddy_config:
+
+networks:
+    frontend:
+    backend:

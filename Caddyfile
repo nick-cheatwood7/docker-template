@@ -1,20 +1,23 @@
+{
+	local_certs
+}
+
 localhost {
-	# Templates give static sites some dynamic features
-	templates
-
-	# Compress responses according to Accept-Encoding headers
 	encode gzip zstd
-
-	# Make HTML file extension optional
+	templates
 	root * /var/www/html
-	try_files {path}.html {path}
+	file_server
 
-	# Send API requests to backend
 	reverse_proxy /api/* node-app:4000 {
-		# lb_policy       random_choose 2
-		# health_path     /ok
-		# health_interval 10s
+		header_down Strict-Transport-Security max-age=31536000;
+		header_down Content-Type application/json;
 	}
 
-	# reverse_proxy / react-app:5173
+	handle /api {
+		respond "OK" 200
+	}
+}
+
+www.localhost {
+	redir https://localhost{uri}
 }
