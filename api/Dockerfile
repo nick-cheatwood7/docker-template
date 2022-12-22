@@ -1,22 +1,19 @@
 FROM node:18-alpine
 
-RUN npm install -g nodemon
-
-# set working directory
 WORKDIR /app
 
 COPY package*.json ./
 
-# commands to run at build time
+RUN rm -rf dist
+
 RUN npm install
 
-# copy project files to location
-COPY ./ ./
+# expose ports -- will be proxied by Caddy
+# EXPOSE 4000
 
-# expose ports
-EXPOSE 4000
+RUN npm run build
 
 # commands to run at runtime
-CMD ["npm", "run", "dev"]
+CMD ["npm", "run", "start"]
 
 # build by running `docker build -t my-app:v1 ./`

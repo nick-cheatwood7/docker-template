@@ -1,5 +1,5 @@
-const express = require("express");
-const cors = require("cors");
+import express, { type Request, type Response } from "express";
+import cors from "cors";
 
 const app = express();
 
@@ -9,7 +9,7 @@ app.use(
     })
 );
 
-app.get("/", (req, res) => {
+app.get("/", (_req: Request, res: Response) => {
     res.json([
         {
             id: 1,

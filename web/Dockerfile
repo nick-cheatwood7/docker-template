@@ -8,6 +8,8 @@ RUN npm install
 
 COPY . .
 
-EXPOSE 5173
+# EXPOSE 5173
 
-CMD ["npm", "run", "dev"]
+# RUN npm run build
+CMD ["npm", "run", "build"]
+# RUN cp -a /dist /var/www/html

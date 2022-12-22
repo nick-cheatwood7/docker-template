@@ -1,5 +1,6 @@
 # do not build into images
 node_modules
+dist
 *.log
 *.env
 *.md
