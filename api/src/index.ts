@@ -5,6 +5,11 @@ import cors from "cors";
 dotenv.config();
 
 const __prod__ = process.env.NODE_ENV === "production";
+const PORT = Number(process.env.PORT) || 8080;
+
+// NOTE: You'll want to remove this in prod. This only shows how Docker will read from the .env file
+const SECRET_KEY = process.env.SECRET_KEY;
+console.log("Super secret key from .env file:", SECRET_KEY);
 
 const app = express();
 
@@ -36,4 +41,4 @@ app.get("/api/people", (req: Request, res: Response) => {
     ]);
 });
 
-app.listen(4000, () => console.log("Server started on port 4000!"));
+app.listen(PORT, () => console.log(`Server started on port ${PORT}!`));
