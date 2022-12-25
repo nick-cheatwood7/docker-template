@@ -13,8 +13,6 @@ console.log("Super secret key from .env file:", SECRET_KEY);
 
 const app = express();
 
-console.log("hello world, testing refresh");
-
 app.use(
     cors({
         origin: __prod__ ? "127.0.0.1:443" : "http://localhost:3000",
