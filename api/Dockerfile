@@ -1,20 +1,22 @@
 # stage 1: build code
-FROM node:18-alpine as build
-WORKDIR /usr/app
+FROM node:18-alpine AS builder
+ENV NODE_ENV=development
+WORKDIR /usr/app/server
+
 COPY package*.json ./
 RUN npm install
 
-COPY . .
-
+COPY ./ ./
 RUN npm run build
 
 # stage 2: serve code
-FROM node:18-alpine
-WORKDIR /usr/app
+FROM node:18-alpine AS runner
+ENV NODE_ENV=production
+WORKDIR /usr/app/server
+
 COPY package*.json ./
 RUN npm install --only=production
 
-COPY --from=build /usr/app/dist ./dist
-# COPY .env .
+COPY --from=builder ./usr/app/server/dist/ ./dist
 
-CMD ["node", "dist/index.js"]
+CMD ["npm", "run", "start"]

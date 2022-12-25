@@ -4,17 +4,14 @@ services:
     node-app:
         container_name: node-app
         restart: unless-stopped
-        env_file:
-            - ./api/.env
+        env_file: ./api/.env
         environment:
-            - NODE_ENV=production
-            - PORT=4000
+            - PORT=5000
         build:
             context: ./api
             dockerfile: Dockerfile
-        volumes:
-            - ./api:/app
-            - /app/node_modules
+            tags:
+                - node-app:latest
         networks:
             - backend
 
@@ -22,8 +19,8 @@ services:
         build: ./web
         container_name: react-app
         volumes:
-            - ./web:/app
-            - /app/node_modules
+            - ./web:/usr/app/web
+            - /usr/app/web/node_modules
         networks:
             - frontend
             - backend
@@ -52,7 +49,6 @@ services:
 
 volumes:
     caddy_data:
-        # external: true
     caddy_config:
 
 networks:

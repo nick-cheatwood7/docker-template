@@ -8,7 +8,7 @@ localhost {
 	root * /var/www/html
 	file_server
 
-	reverse_proxy /api/* node-app:4000 {
+	reverse_proxy /api/* node-app:4000 node-app:5000 {
 		header_down Strict-Transport-Security max-age=31536000;
 		header_down Content-Type application/json;
 	}
